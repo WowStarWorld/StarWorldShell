@@ -1,7 +1,7 @@
 # Custom Text README
 
 ## Create
-     Create a file with the suffix ".txt", and the file name does not contain special characters
+     Create a file with the suffix ".txt" or ".md", and the file name does not contain special characters
      Markdown can be used
 
 ## View

@@ -32,7 +32,7 @@ info = {
 def onLoad(*args):
     if os.path.isdir(os.path.join(plugin_path,"custom_text")):
         for file in os.listdir(os.path.join(plugin_path,"custom_text")):
-           if file.endswith(".txt"):
+           if file.endswith(".txt") or file.endswith(".md"):
                 with open(os.path.join(plugin_path,"custom_text",file),"rb") as f:
                     custom_text_list["".join(filter(str.isalnum, file.split(".")[0])).replace(" ","")] = f.read().decode("utf-8")
     else:
