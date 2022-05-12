@@ -4,7 +4,6 @@ import rich.console
 import sys
 
 plugins = {}
-scoreboards = {}
 console = rich.console.Console()
 print = console.print
 input = console.input
