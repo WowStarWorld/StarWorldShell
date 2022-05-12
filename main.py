@@ -42,12 +42,6 @@ command_informations = {
         "usage":"help | help <command>",
         "plugin":"StarWorldShell"
     },
-    "scoreboard":{
-        "name":"scoreboard",
-        "description":"StarWorldShell Scoreboard",
-        "usage":"scoreboard help",
-        "plugin":"StarWorldShell"
-    },
     "version":{
         "name":"version",
         "description":"StarWorldShell version",
@@ -255,3 +249,4 @@ if __name__ == '__main__':
             console.log("[red]Plugin not found")
         except Exception:
             console.log(exception_format(), style="red")
+
