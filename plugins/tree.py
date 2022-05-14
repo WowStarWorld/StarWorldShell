@@ -13,6 +13,7 @@ def print_dir(path, level=0):
     except:pass
 
 def print_dir_command(*args) -> None:
+    console.print("_"*console.width)
     if args == ():
         print_dir(os.getcwd())
     else:
