@@ -103,7 +103,7 @@ def reloads(*args):
     for i in plugins:
         importlib.reload(plugins[i]["plugin"])
         if hasattr(plugins[i]["plugin"], "onReload"):
-            plugins[i]["plugin"].onReload()
+            plugins[i]["plugin"].onReload(*sys.argv)
         
 
 
@@ -132,7 +132,7 @@ def exception_format():
 def parse_command(command_string):
     command_string = command_string.split(' ')
     for i in range(len(command_string)):
-        command_string[i-1] = command_string[i-1].replace("${space}", " ").replace("${replace}", "$")
+        command_string[i-1] = command_string[i-1].replace("${}", " ").replace("${r}", "$")
     for i in plugins:
         if hasattr(plugins[i]["plugin"], "onCommand"):
             plugins[i]['plugin'].onCommand(command_string)
