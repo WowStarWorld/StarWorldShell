@@ -9,7 +9,7 @@ print = console.print
 input = console.input
 log = console.log
 swlocals:dict
-version = "1.0.2"
+version = "1.0.4"
 
 def quits():
     log("[green]Disabling...[/green]")
@@ -219,9 +219,10 @@ if __name__ == '__main__':
     for i in plugins:
         if hasattr(plugins[i]["plugin"], "onHelp"):
             plugins[i]["plugin"].onHelp()
+    print()
     while True:
         try:
-            command = input("[green]==> ")
+            command = input(f"[green]{os.getcwd()}> ")
         except:
             quits()
         try:

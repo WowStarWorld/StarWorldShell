@@ -60,4 +60,4 @@ def onReload(*args):
     onLoad()
 
 def onHelp(*args):
-    console.log("[bold yellow]Type \"*[Text]\" to print custom text")
+    console.log('[bold yellow]Type "*README" for custom text help')
