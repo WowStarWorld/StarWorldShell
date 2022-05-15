@@ -9,7 +9,7 @@ print = console.print
 input = console.input
 log = console.log
 swlocals:dict
-version = "1.0.1"
+version = "1.0.2"
 
 def quits():
     log("[green]Disabling...[/green]")
