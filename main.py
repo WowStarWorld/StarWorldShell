@@ -2,15 +2,15 @@ import os
 import importlib
 import rich.console
 import sys
-import traceback
+
 
 plugins = {}
-console = rich.console.Console()
+console = rich.console.Console(stderr=True,)
 print = console.print
 input = console.input
 log = console.log
 swlocals:dict
-version = "1.0.5"
+version = "1.0.6"
 
 def quits():
     log("[green]Disabling...[/green]")
@@ -150,7 +150,7 @@ def parse_command(command_string):
             except PluginNotFoundError:
                 raise PluginNotFoundError("Plugin not found")
             except:
-                log(traceback.format_exc())
+                console.print_exception(show_locals=True, )
                 console.log("[red]An internal error occurred while attempting to perform this[/red]")
         else:
             try:
@@ -163,7 +163,7 @@ def parse_command(command_string):
             except PluginNotFoundError:
                 raise PluginNotFoundError("Plugin not found")
             except:
-                log(traceback.format_exc())
+                console.print_exception(show_locals=True)
                 console.log("[red]An internal error occurred while attempting to perform this[/red]")
     else:
         raise CommandNotFoundError("Command not found")
@@ -179,7 +179,8 @@ def load_plugins_from_plugins_folder():
             try:
                 pl = importlib.import_module('plugins.' + plugin_name)
             except:
-                return
+                console.print_exception()
+                continue
             pl.swshell = swlocals
             pl.plugin_path = os.path.join(os.path.dirname(__file__), 'plugins')
             if hasattr(pl, 'info'):
@@ -194,7 +195,7 @@ def load_plugins_from_plugins_folder():
                     plugins.pop("[green]" + (pl.info["name"].replace(" ","_").replace("\\","").replace("[", "\[")) + "[/green]")
                     plugins["[red]" + (pl.info["name"].replace(" ","_").replace("\\","").replace("[", "\[")) + "[/red]"] = {"info": pl.info,
                                                                                           "plugin": pl}
-                    console.log(exception_format(), style="red")
+                    console.print_exception(show_locals=True)
             if "commands" in pl.info:
                 for command in range(len(pl.info["commands"])):
                     if "[red]" + (pl.info["name"].replace(" ","_").replace("\\","").replace("[", "\[")) + "[/red]" in plugins:
@@ -226,7 +227,13 @@ if __name__ == '__main__':
     while True:
         try:
             command = input(f"[green]{os.getcwd()}> ")
-        except:
+        except KeyboardInterrupt:
+            print()
+            console.print_exception()
+        except EOFError:
+            print()
+            console.print_exception()
+        except Exception:
             quits()
         try:
             if command.strip() == "":
@@ -251,5 +258,4 @@ if __name__ == '__main__':
         except PluginNotFoundError:
             console.log("[red]Plugin not found")
         except Exception:
-            console.log(exception_format(), style="red")
-
+            console.print_exception()
