@@ -1,7 +1,7 @@
 import rich.console
 import os
 
-
+swshell:dict
 console = rich.console.Console()
 info = {
     "name": "Shell Command Parser",
@@ -15,15 +15,20 @@ info = {
 }
 
 class parser:
-    help = [
-        {"description":"Shows this help","usage":"help"},
-        {"description":"Changes the current directory","usage":"chdir \[path]"},
-        {"description":"Starts a program","usage":"start \[path]"},
-        {"description":"Prints the message","usage":"echo \[*message]"}
-    ]
+    names = {"help","chdir \[path]","start \[path]","echo \[*message]","pwd","eval \[*command]","command \[*command]","message \[*message]"}
+    help = {
+        "help":"Shows this help",
+        "chdir \[path]":"Changes the current directory",
+        "start \[path]":"Starts a program",
+        "echo \[*message]":"Prints the message",
+        "pwd":"Prints the current working directory",
+        "eval \[*command]":"Evaluates a command",
+        "command \[*command]":"Executes a command",
+        "message \[*message]":"Send a message"
+    }
     def __init__(self,command) -> None:
         self.__command = command
-        self.__command_compiled = command.split(" ")
+        self.__command_compiled = self.__command.split(" ")
         for i in range(len(self.__command_compiled)):
             self.__command_compiled[i-1] = self.__command_compiled[i-1].replace("${}", " ").replace("${r}", "$")
         self.__command_name = self.__command_compiled[0].lower()
@@ -31,9 +36,9 @@ class parser:
         self.__status__ = self.run()
     def run(self) -> None:
         if self.__command_name == "help":
-            for i in self.help:
-                console.log("[green]"+i["usage"])
-                console.log("[white]    "+i["description"])
+            for i in self.names:
+                console.log("[green]"+i)
+                console.log("[white]    "+self.help[i])
         elif self.__command_name == "chdir":
             if len(self.__command_args) == 0:
                 console.log("[red][SCP] Please enter a path")
@@ -53,11 +58,39 @@ class parser:
                 console.log("[red][SCP] Please enter a message")
             else:
                 console.log(" ".join(self.__command_args))
-
+        elif self.__command_name == "pwd":
+            console.log(os.getcwd())
+        elif self.__command_name == "eval":
+            if len(self.__command_args) == 0:
+                console.log("[red][SCP] Please enter a command")
+            else:
+                arg = " ".join(self.__command_args[0:])
+                if not self.__class__(arg.strip()).__status__:
+                    console.log("[red][SCP] Invalid command")
+        elif self.__command_name == "command":
+            if len(self.__command_args) == 0:
+                console.log("[red][SCP] Please enter a command")
+            else:
+                arg = " ".join(self.__command_args[0:])
+                swshell["parse_command"](arg)
+        elif self.__command_name == "message":
+            if len(self.__command_args) == 0:
+                console.log("[red][SCP] Please enter a message")
+            else:
+                r = 0
+                plugins = swshell["plugins"]
+                command = " ".join(self.__command_args[0:])
+                for i in plugins:
+                    if hasattr(plugins[i]["plugin"], "onMessage"):
+                        if plugins[i]['plugin'].onMessage(command):
+                            r += 1
+                if r == 0:
+                    console.log(command)
+                del r
         else:
             return False
         return True
-        
+
 def onLoad(*args):
     console.log("[green][SCP] Enabled !")
 def onDisable(*args):

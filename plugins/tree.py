@@ -9,7 +9,7 @@ def print_tree(path, level=0):
             if os.path.isdir(os.path.join(path, file)):
                 console.log("│  " * level + "├─[bold blue]" + file)
                 print_tree(os.path.join(path, file), level + 1)
-            else:
+            elif os.path.isfile(os.path.join(path, file)):
                 console.log("│  " * level + "├─[bold green]" + file)
     except:pass
 
@@ -25,7 +25,7 @@ def print_dir(path):
         for file in os.listdir(path):
             if os.path.isdir(os.path.join(path, file)):
                 console.print("[bold blue]"+file.replace("[","\["))
-            else:
+            elif os.path.isfile(os.path.join(path, file)):
                 console.print("[bold green]"+file.replace("[","\["))
     except:pass
 

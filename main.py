@@ -2,6 +2,7 @@ import os
 import importlib
 import rich.console
 import sys
+import traceback
 
 plugins = {}
 console = rich.console.Console()
@@ -9,7 +10,7 @@ print = console.print
 input = console.input
 log = console.log
 swlocals:dict
-version = "1.0.4"
+version = "1.0.5"
 
 def quits():
     log("[green]Disabling...[/green]")
@@ -149,6 +150,7 @@ def parse_command(command_string):
             except PluginNotFoundError:
                 raise PluginNotFoundError("Plugin not found")
             except:
+                log(traceback.format_exc())
                 console.log("[red]An internal error occurred while attempting to perform this[/red]")
         else:
             try:
@@ -161,6 +163,7 @@ def parse_command(command_string):
             except PluginNotFoundError:
                 raise PluginNotFoundError("Plugin not found")
             except:
+                log(traceback.format_exc())
                 console.log("[red]An internal error occurred while attempting to perform this[/red]")
     else:
         raise CommandNotFoundError("Command not found")
