@@ -6,7 +6,6 @@ plugin_path:str
 swshell:dict
 
 console = rich.console.Console()
-swshell: dict
 info = {
     "name": "example plugin",
     "author": "WoWStarWorld",

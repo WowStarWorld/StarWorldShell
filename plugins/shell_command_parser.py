@@ -1,5 +1,6 @@
 import rich.console
 import os
+import traceback
 
 swshell:dict
 console = rich.console.Console()
@@ -72,13 +73,13 @@ class parser:
                 console.log("[red][SCP] Please enter a command")
             else:
                 arg = " ".join(self.__command_args[0:])
-                swshell["parse_command"](arg)
+                swshell["modules"].parser.parse_command(arg,swshell["modules"].variables.registered_commands, swshell["modules"].variables.command_informations)
         elif self.__command_name == "message":
             if len(self.__command_args) == 0:
                 console.log("[red][SCP] Please enter a message")
             else:
                 r = 0
-                plugins = swshell["plugins"]
+                plugins = swshell["modules"].variables.plugins
                 command = " ".join(self.__command_args[0:])
                 for i in plugins:
                     if hasattr(plugins[i]["plugin"], "onMessage"):
